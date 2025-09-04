@@ -1,0 +1,119 @@
+:root {
+    --primary-bg: #f4f7f9;
+    --secondary-bg: #ffffff;
+    --text-primary: #1d2d35;
+    --text-secondary: #5a6b74;
+    --brand-color: #007aff;
+    --alert-color: #ff3b30;
+    --success-color: #34c759;
+    --border-color: #dfe6eb;
+    --font-family: 'Poppins', sans-serif;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font-family); background-color: var(--primary-bg); color: var(--text-primary); line-height: 1.6; }
+button { font-family: var(--font-family); font-size: 1rem; cursor: pointer; border-radius: 8px; border: none; padding: 0.8rem 1.5rem; transition: all 0.2s ease; }
+main { padding: 1.5rem; }
+.content-section { background-color: var(--secondary-bg); border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; text-align: center; }
+.section-description { text-align: center; color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.9rem; }
+.error-message { color: var(--alert-color); text-align: center; margin-top: 1rem; font-weight: 600; min-height: 1.2em; }
+.info-message { color: var(--success-color); text-align: center; margin-top: 1rem; font-weight: 600; min-height: 1.2em; }
+
+/* --- Auth Page Centered Layout --- */
+.auth-page-wrapper {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.auth-form-panel {
+    width: 100%;
+    max-width: 420px;
+    background-color: var(--secondary-bg);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.auth-branding-panel {
+    display: none; /* Hides the blue side panel */
+}
+
+/* New styles for the header inside the form */
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.auth-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--brand-color);
+}
+.auth-header p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.auth-tabs { display: flex; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); }
+.auth-tab {
+    flex-grow: 1;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease-in-out;
+}
+.auth-tab.active { color: var(--brand-color); border-bottom-color: var(--brand-color); }
+.auth-form { display: none; flex-direction: column; gap: 1rem; }
+.auth-form.active { display: flex; }
+.auth-form-container input { width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; }
+.auth-form-container button[type="submit"] { background-color: var(--brand-color); color: white; font-weight: 600; padding-top: 1rem; padding-bottom: 1rem;}
+.auth-form-container button[type="submit"]:hover { background-color: #0056b3; }
+
+/* --- App (Logged-in View) Styles --- */
+#app-container main { max-width: 800px; margin: 0 auto; }
+.app-header { display: flex; justify-content: space-between; align-items: center; background-color: var(--secondary-bg); padding: 1rem 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+.app-header h1 { font-size: 1.8rem; margin: 0; padding: 0; color: var(--brand-color);}
+.app-header > div { display: flex; align-items: center; gap: 1rem; }
+#user-email-display { color: var(--text-secondary); font-size: 0.9rem; }
+#logout-btn { background-color: #e5e5ea; color: var(--text-primary); font-weight: 600; }
+#logout-btn:hover { background-color: #dcdce1; }
+.data-form { display: flex; flex-direction: column; gap: 0.5rem; }
+.data-form label { font-weight: 600; font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.75rem; }
+.data-form input, .data-form textarea, .data-form select { width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border-color); border-radius: 8px; font-family: var(--font-family); font-size: 1rem; background-color: #fff; }
+.data-form input:focus, .data-form textarea:focus, .data-form select:focus { outline: none; border-color: var(--brand-color); box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2); }
+.data-form textarea { resize: vertical; min-height: 80px; }
+.qr-container { display: flex; flex-direction: column; gap: 2rem; margin-top: 1rem; }
+.qr-output { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+#qrcode { padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-height: 200px; display: flex; align-items: center; justify-content: center; }
+#downloadQR { background-color: var(--brand-color); color: white; font-weight: 600; }
+#downloadQR:hover { background-color: #0056b3; }
+
+/* --- Footer and Modal Styles --- */
+footer { text-align: center; padding: 2rem 1rem; font-size: 0.9rem; color: var(--text-secondary); border-top: 1px solid var(--border-color); margin: 2rem auto 0; }
+.footer-links { margin-bottom: 1rem; }
+.footer-links a { color: var(--text-secondary); text-decoration: none; margin: 0 1rem; font-weight: 600; }
+.footer-links a:hover { color: var(--brand-color); }
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: none; justify-content: center; align-items: center; z-index: 1000; }
+.modal-overlay.active { display: flex; }
+.modal-content { background-color: white; padding: 2rem; border-radius: 12px; max-width: 600px; width: 90%; box-shadow: 0 5px 15px rgba(0,0,0,0.3); position: relative; max-height: 80vh; overflow-y: auto; }
+.modal-content h2 { margin-top: 0; margin-bottom: 1.5rem; color: var(--brand-color); }
+.modal-content p { margin-bottom: 1rem; line-height: 1.7; }
+.modal-close-btn { position: absolute; top: 1rem; right: 1rem; font-size: 1.8rem; font-weight: bold; color: #aaa; background: none; border: none; cursor: pointer; padding: 0; line-height: 1; }
+.modal-close-btn:hover { color: var(--text-primary); }
+
+/* --- Responsive adjustments --- */
+@media (min-width: 769px) {
+    .qr-container { flex-direction: row; align-items: flex-start; }
+    .qr-container .data-form { flex: 1; }
+    .qr-output { flex-shrink: 0; margin-top: 2rem; }
+}
