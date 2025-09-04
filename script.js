@@ -172,28 +172,29 @@ document.addEventListener('DOMContentLoaded', () => {
         generateQRCode();
     }
 
-    function generateQRCode() {
-        const qrData = {};
-        for (const key in qrInputs) {
-            qrData[key] = qrInputs[key].value;
-        }
+    // Replace the old generateQRCode function in your main script.js
+function generateQRCode() {
+    // **IMPORTANT:** Replace this with your actual Vercel URL
+    const publicCardUrl = `https://aegis-app.vercel.app/card.html`;
 
-        if (!qrData.fullName) {
-            qrCodeContainer.innerHTML = "<em>Enter your full name to generate a QR code.</em>";
-            return;
-        }
-        
-        // **IMPROVEMENT:** Clear previous QR code before generating a new one
-        qrCodeContainer.innerHTML = "";
-        qrcode = new QRCode(qrCodeContainer, {
-            text: JSON.stringify(qrData, null, 2), // The data for the QR code
-            width: 200,
-            height: 200,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.H
-        });
+    if (!currentUser) {
+        qrCodeContainer.innerHTML = "<em>Login to get your QR code.</em>";
+        return;
     }
+    
+    // The new data for the QR code is just a simple link!
+    const userCardLink = `${publicCardUrl}?id=${currentUser.id}`;
+
+    qrCodeContainer.innerHTML = ""; // Clear the previous QR code
+    qrcode = new QRCode(qrCodeContainer, {
+        text: userCardLink,
+        width: 200,
+        height: 200,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+}
 
     // A helper function to prevent saving to the database on every single keystroke
     const debounce = (func, delay) => {
