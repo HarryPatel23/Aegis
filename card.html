@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aegis Emergency Card</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Simple styles for the public card page */
+        body { background-color: #fff; }
+        .card-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: var(--secondary-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+        .card-header {
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header h1 {
+            font-size: 2.5rem;
+            color: var(--brand-color);
+        }
+        .card-section { margin-bottom: 1.5rem; }
+        .card-section h3 {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .card-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+        }
+        .card-item-label { font-weight: 600; color: var(--text-primary); }
+        .card-item-value { color: var(--text-secondary); text-align: right; }
+        .loader { text-align: center; font-size: 1.5rem; padding: 3rem; }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <div class="card-header">
+            <h1>Aegis Card</h1>
+        </div>
+
+        <div id="card-content">
+            <p class="loader">Loading Information...</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="card.js"></script>
+</body>
+</html>
