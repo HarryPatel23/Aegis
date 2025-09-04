@@ -1,10 +1,6 @@
+// script.js
+
 document.addEventListener('DOMContentLoaded', () => {
-
-    const SUPABASE_URL = 'https://pbczbrasaqytqrpwykcc.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBiY3picmFzYXF5dHFycHd5a2NjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3MDgyODMsImV4cCI6MjA3MjI4NDI4M30.GrWuP8niq_2oPOcZIVkDo9jwn89DOLvN4xAhCVR6IfY';
-
-    const { createClient } = supabase;
-    const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     let currentUser = null;
 
     // --- DOM Element References ---
@@ -45,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         physicianPhone: document.getElementById('physicianPhone'),
     };
 
-    let qrcode = null; // Initialize as null
+    let qrcode = null;
 
     // --- Modal Logic ---
     function openModal(modal) { if (modal) modal.classList.add('active'); }
@@ -77,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
         clearMessages();
     });
 
-    // --- Helper function to clear auth messages ---
     function clearMessages() {
         authError.textContent = '';
         authMessage.textContent = '';
@@ -137,66 +132,47 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Database & QR Code Logic ---
     async function saveQRData(userId, data) {
         if (!userId) return;
-        // **IMPROVEMENT:** Use 'upsert'. It creates the record if it doesn't exist,
-        // and updates it if it does. This is safer for new users.
         const profileData = { id: userId, ...data };
         const { error } = await _supabase.from('profiles').upsert(profileData);
-        if (error) {
-            console.error("Error saving data to Supabase: ", error);
-            alert("Error saving your data. Please check the console.");
-        }
+        if (error) console.error("Error saving data to Supabase: ", error);
     }
 
     async function loadQRData(userId) {
         const { data, error } = await _supabase.from('profiles').select('*').eq('id', userId).single();
         if (data) {
-            // Loop through all our form inputs and fill them with data from the database
             for (const key in qrInputs) {
-                // Convert our camelCase key (e.g., fullName) to snake_case (e.g., full_name) to match the database
                 const dbKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
                 if (data[dbKey] !== null && data[dbKey] !== undefined) {
                     qrInputs[key].value = data[dbKey];
                 } else {
-                    qrInputs[key].value = ''; // Clear the field if DB value is null
+                    qrInputs[key].value = '';
                 }
             }
-        } else if (error && error.code !== 'PGRST116') { // Ignore 'no rows found' error
+        } else if (error && error.code !== 'PGRST116') {
             console.error("Error loading data:", error);
         } else {
-            // If there's no profile data yet for this new user, clear all fields
              for (const key in qrInputs) {
                 qrInputs[key].value = '';
             }
         }
-        // Generate the QR code with the loaded (or cleared) data
         generateQRCode();
     }
 
-    // Replace the old generateQRCode function in your main script.js
-function generateQRCode() {
-    // **IMPORTANT:** Replace this with your actual Vercel URL
-    const publicCardUrl = `https://aegis-app.vercel.app/card.html`;
-
-    if (!currentUser) {
-        qrCodeContainer.innerHTML = "<em>Login to get your QR code.</em>";
-        return;
+    function generateQRCode() {
+        const publicCardUrl = `https://aegis-app.vercel.app/card.html`; // Make sure this is your Vercel URL
+        if (!currentUser) {
+            qrCodeContainer.innerHTML = "<em>Login to get your QR code.</em>";
+            return;
+        }
+        const userCardLink = `${publicCardUrl}?id=${currentUser.id}`;
+        qrCodeContainer.innerHTML = "";
+        qrcode = new QRCode(qrCodeContainer, {
+            text: userCardLink,
+            width: 200, height: 200, colorDark: "#000000",
+            colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
+        });
     }
-    
-    // The new data for the QR code is just a simple link!
-    const userCardLink = `${publicCardUrl}?id=${currentUser.id}`;
 
-    qrCodeContainer.innerHTML = ""; // Clear the previous QR code
-    qrcode = new QRCode(qrCodeContainer, {
-        text: userCardLink,
-        width: 200,
-        height: 200,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-    });
-}
-
-    // A helper function to prevent saving to the database on every single keystroke
     const debounce = (func, delay) => {
         let timeout;
         return (...args) => {
@@ -205,7 +181,6 @@ function generateQRCode() {
         };
     };
     
-    // Create a debounced version of our save function that waits 1 second after the user stops typing
     const debouncedSave = debounce(() => {
         if (!currentUser) return;
         const currentQRData = {};
@@ -216,10 +191,9 @@ function generateQRCode() {
         saveQRData(currentUser.id, currentQRData);
     }, 1000);
 
-    // Add a single event listener to the whole form
     qrForm.addEventListener('input', () => {
-        generateQRCode(); // Update QR code instantly on every keystroke
-        debouncedSave();  // Save to database after user pauses typing
+        generateQRCode();
+        debouncedSave();
     });
 
     downloadQRButton.addEventListener('click', () => {
