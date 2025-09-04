@@ -1,6 +1,5 @@
-// script.js
-
 document.addEventListener('DOMContentLoaded', () => {
+
     let currentUser = null;
 
     // --- DOM Element References ---
@@ -159,7 +158,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function generateQRCode() {
-        const publicCardUrl = `https://aegis-app.vercel.app/card.html`; // Make sure this is your Vercel URL
+        // **CORRECTION IS HERE:** Ensure this URL matches your Vercel project URL.
+        const publicCardUrl = `https://aegis-app.vercel.app/card.html`; 
+
         if (!currentUser) {
             qrCodeContainer.innerHTML = "<em>Login to get your QR code.</em>";
             return;
