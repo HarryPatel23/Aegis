@@ -1,15 +1,9 @@
+// card.js
+
 document.addEventListener('DOMContentLoaded', () => {
-    // IMPORTANT: Use the same credentials as your main script.js file
-    const SUPABASE_URL = 'https://pbczbrasaqytqrpwykcc.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBiY3picmFzYXF5dHFycHd5a2NjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3MDgyODMsImV4cCI6MjA3MjI4NDI4M30.GrWuP8niq_2oPOcZIVkDo9jwn89DOLvN4xAhCVR6IfY';
-    
-    const { createClient } = supabase;
-    const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const cardContent = document.getElementById('card-content');
 
-    // Function to fetch and display the user's profile
     async function loadCardData() {
-        // 1. Get the user's ID from the URL (e.g., ...card.html?id=USER_ID)
         const params = new URLSearchParams(window.location.search);
         const userId = params.get('id');
 
@@ -18,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 2. Fetch the profile data from Supabase
         const { data, error } = await _supabase
             .from('profiles')
             .select('*')
@@ -31,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 3. Build the HTML to display the data
         cardContent.innerHTML = `
             <div class="card-section">
                 <h3>Personal Information</h3>
@@ -55,6 +47,5 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
-    // Run the function when the page loads
     loadCardData();
 });
