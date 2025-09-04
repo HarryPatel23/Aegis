@@ -45,10 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         physicianPhone: document.getElementById('physicianPhone'),
     };
 
-    let qrcode = new QRCode(qrCodeContainer, {
-        width: 200, height: 200, colorDark: "#000000",
-        colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
-    });
+    let qrcode = null; // Initialize as null
 
     // --- Modal Logic ---
     function openModal(modal) { if (modal) modal.classList.add('active'); }
@@ -97,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
             await loadQRData(user.id);
         } else {
             currentUser = null;
-            // Use flex to ensure the auth container is properly centered when visible
             authContainer.style.display = 'flex';
             appContainer.style.display = 'none';
         }
@@ -112,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
             password: document.getElementById('login-password').value,
         });
         if (error) {
-            // Check for the specific email verification error
             if (error.message.includes("Email not confirmed")) {
                 authError.textContent = 'Please verify your email address. Check your inbox for the link.';
             } else {
@@ -142,16 +137,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Database & QR Code Logic ---
     async function saveQRData(userId, data) {
         if (!userId) return;
-        // Use 'upsert' to create a profile if it doesn't exist, or update it if it does.
+        // **IMPROVEMENT:** Use 'upsert'. It creates the record if it doesn't exist,
+        // and updates it if it does. This is safer for new users.
         const profileData = { id: userId, ...data };
         const { error } = await _supabase.from('profiles').upsert(profileData);
-        if (error) console.error("Error saving data to Supabase: ", error);
+        if (error) {
+            console.error("Error saving data to Supabase: ", error);
+            alert("Error saving your data. Please check the console.");
+        }
     }
 
     async function loadQRData(userId) {
         const { data, error } = await _supabase.from('profiles').select('*').eq('id', userId).single();
         if (data) {
+            // Loop through all our form inputs and fill them with data from the database
             for (const key in qrInputs) {
+                // Convert our camelCase key (e.g., fullName) to snake_case (e.g., full_name) to match the database
                 const dbKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
                 if (data[dbKey] !== null && data[dbKey] !== undefined) {
                     qrInputs[key].value = data[dbKey];
@@ -159,39 +160,42 @@ document.addEventListener('DOMContentLoaded', () => {
                     qrInputs[key].value = ''; // Clear the field if DB value is null
                 }
             }
+        } else if (error && error.code !== 'PGRST116') { // Ignore 'no rows found' error
+            console.error("Error loading data:", error);
         } else {
-            // If there's no profile data yet for this user, clear all fields
-            for (const key in qrInputs) {
+            // If there's no profile data yet for this new user, clear all fields
+             for (const key in qrInputs) {
                 qrInputs[key].value = '';
             }
         }
+        // Generate the QR code with the loaded (or cleared) data
         generateQRCode();
     }
 
     function generateQRCode() {
-        const qrData = {
-            name: qrInputs.fullName.value, dob: qrInputs.dateOfBirth.value,
-            blood_type: qrInputs.bloodType.value, organ_donor: qrInputs.organDonor.value,
-            medications: qrInputs.medications.value, allergies: qrInputs.allergies.value,
-            conditions: qrInputs.medicalConditions.value,
-            primary_contact: { name: qrInputs.primaryContactName.value, phone: qrInputs.primaryContactPhone.value },
-            secondary_contact: { name: qrInputs.secondaryContactName.value, phone: qrInputs.secondaryContactPhone.value },
-            physician: { name: qrInputs.physicianName.value, phone: qrInputs.physicianPhone.value }
-        };
+        const qrData = {};
+        for (const key in qrInputs) {
+            qrData[key] = qrInputs[key].value;
+        }
 
-        if (!qrData.name) {
-            qrCodeContainer.innerHTML = "<em>Enter your name to generate QR code.</em>";
+        if (!qrData.fullName) {
+            qrCodeContainer.innerHTML = "<em>Enter your full name to generate a QR code.</em>";
             return;
         }
-        // Clear previous QR code before generating a new one
+        
+        // **IMPROVEMENT:** Clear previous QR code before generating a new one
         qrCodeContainer.innerHTML = "";
         qrcode = new QRCode(qrCodeContainer, {
-            text: JSON.stringify(qrData, null, 2),
-            width: 200, height: 200, colorDark: "#000000",
-            colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
+            text: JSON.stringify(qrData, null, 2), // The data for the QR code
+            width: 200,
+            height: 200,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
         });
     }
 
+    // A helper function to prevent saving to the database on every single keystroke
     const debounce = (func, delay) => {
         let timeout;
         return (...args) => {
@@ -200,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     };
     
+    // Create a debounced version of our save function that waits 1 second after the user stops typing
     const debouncedSave = debounce(() => {
         if (!currentUser) return;
         const currentQRData = {};
@@ -210,9 +215,10 @@ document.addEventListener('DOMContentLoaded', () => {
         saveQRData(currentUser.id, currentQRData);
     }, 1000);
 
+    // Add a single event listener to the whole form
     qrForm.addEventListener('input', () => {
-        generateQRCode();
-        debouncedSave();
+        generateQRCode(); // Update QR code instantly on every keystroke
+        debouncedSave();  // Save to database after user pauses typing
     });
 
     downloadQRButton.addEventListener('click', () => {
