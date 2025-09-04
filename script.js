@@ -158,8 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function generateQRCode() {
-        // **CORRECTION IS HERE:** Ensure this URL matches your Vercel project URL.
-        const publicCardUrl = `https://aegis-app.vercel.app/card.html`; 
+        // **THIS IS THE FIX:** Using your correct Vercel URL
+        const publicCardUrl = `https://aegis-iota-two.vercel.app/card.html`; 
 
         if (!currentUser) {
             qrCodeContainer.innerHTML = "<em>Login to get your QR code.</em>";
