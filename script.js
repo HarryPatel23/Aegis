@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const termsModal = document.getElementById('terms-modal');
     const disclaimerModal = document.getElementById('disclaimer-modal');
     const allModals = document.querySelectorAll('.modal-overlay');
-    const saveStatus = document.getElementById('save-status'); // New element reference
+    const saveStatus = document.getElementById('save-status');
 
     const qrInputs = {
         fullName: document.getElementById('fullName'),
@@ -130,8 +130,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Database & QR Code Logic ---
     async function saveQRData(userId, data) {
-        if (!userId) return;
+        if (!userId) {
+            console.log('Save cancelled: No user is logged in.');
+            return;
+        }
 
+        console.log('Attempting to save data...');
         saveStatus.textContent = 'Saving...';
         saveStatus.style.color = 'var(--text-secondary)';
         saveStatus.style.opacity = 1;
@@ -144,11 +148,13 @@ document.addEventListener('DOMContentLoaded', () => {
             saveStatus.textContent = 'Error saving data!';
             saveStatus.style.color = 'var(--alert-color)';
         } else {
+            console.log('Data saved successfully!');
             saveStatus.textContent = 'Profile Saved ✔';
             saveStatus.style.color = 'var(--success-color)';
+            
             setTimeout(() => {
                 saveStatus.style.opacity = 0;
-            }, 2000);
+            }, 2500);
         }
     }
 
@@ -197,7 +203,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     const debouncedSave = debounce(() => {
-        if (!currentUser) return;
+        console.log('Debounced save triggered...');
+        if (!currentUser) {
+            console.log('Save cancelled: currentUser is not set.');
+            return;
+        }
         const currentQRData = {};
         for (const key in qrInputs) {
              const dbKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
