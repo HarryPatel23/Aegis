@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     let currentUser = null;
 
     // --- DOM Element References ---
@@ -23,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const termsModal = document.getElementById('terms-modal');
     const disclaimerModal = document.getElementById('disclaimer-modal');
     const allModals = document.querySelectorAll('.modal-overlay');
+    const saveStatus = document.getElementById('save-status'); // New element reference
 
     const qrInputs = {
         fullName: document.getElementById('fullName'),
@@ -131,9 +131,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Database & QR Code Logic ---
     async function saveQRData(userId, data) {
         if (!userId) return;
+
+        saveStatus.textContent = 'Saving...';
+        saveStatus.style.color = 'var(--text-secondary)';
+        saveStatus.style.opacity = 1;
+
         const profileData = { id: userId, ...data };
         const { error } = await _supabase.from('profiles').upsert(profileData);
-        if (error) console.error("Error saving data to Supabase: ", error);
+
+        if (error) {
+            console.error("Error saving data to Supabase: ", error);
+            saveStatus.textContent = 'Error saving data!';
+            saveStatus.style.color = 'var(--alert-color)';
+        } else {
+            saveStatus.textContent = 'Profile Saved ✔';
+            saveStatus.style.color = 'var(--success-color)';
+            setTimeout(() => {
+                saveStatus.style.opacity = 0;
+            }, 2000);
+        }
     }
 
     async function loadQRData(userId) {
@@ -158,9 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function generateQRCode() {
-        // **THIS IS THE FIX:** Using your correct Vercel URL
-        const publicCardUrl = `https://aegis-iota-two.vercel.app/card.html`; 
-
+        const publicCardUrl = `https://aegis-iota-two.vercel.app/card.html`;
         if (!currentUser) {
             qrCodeContainer.innerHTML = "<em>Login to get your QR code.</em>";
             return;
