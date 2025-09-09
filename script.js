@@ -18,9 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const aboutLink = document.getElementById('about-link');
     const termsLink = document.getElementById('terms-link');
     const disclaimerLink = document.getElementById('disclaimer-link');
+    const privacyLink = document.getElementById('privacy-link'); // New element
     const aboutModal = document.getElementById('about-modal');
     const termsModal = document.getElementById('terms-modal');
     const disclaimerModal = document.getElementById('disclaimer-modal');
+    const privacyModal = document.getElementById('privacy-modal'); // New element
     const allModals = document.querySelectorAll('.modal-overlay');
     const saveStatus = document.getElementById('save-status');
 
@@ -49,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     aboutLink.addEventListener('click', (e) => { e.preventDefault(); openModal(aboutModal); });
     termsLink.addEventListener('click', (e) => { e.preventDefault(); openModal(termsModal); });
     disclaimerLink.addEventListener('click', (e) => { e.preventDefault(); openModal(disclaimerModal); });
+    privacyLink.addEventListener('click', (e) => { e.preventDefault(); openModal(privacyModal); }); // New listener
 
     allModals.forEach(modal => {
         modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
@@ -130,12 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Database & QR Code Logic ---
     async function saveQRData(userId, data) {
-        if (!userId) {
-            console.log('Save cancelled: No user is logged in.');
-            return;
-        }
+        if (!userId) return;
 
-        console.log('Attempting to save data...');
         saveStatus.textContent = 'Saving...';
         saveStatus.style.color = 'var(--text-secondary)';
         saveStatus.style.opacity = 1;
@@ -148,13 +147,11 @@ document.addEventListener('DOMContentLoaded', () => {
             saveStatus.textContent = 'Error saving data!';
             saveStatus.style.color = 'var(--alert-color)';
         } else {
-            console.log('Data saved successfully!');
             saveStatus.textContent = 'Profile Saved ✔';
             saveStatus.style.color = 'var(--success-color)';
-            
             setTimeout(() => {
                 saveStatus.style.opacity = 0;
-            }, 2500);
+            }, 2000);
         }
     }
 
@@ -203,11 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     const debouncedSave = debounce(() => {
-        console.log('Debounced save triggered...');
-        if (!currentUser) {
-            console.log('Save cancelled: currentUser is not set.');
-            return;
-        }
+        if (!currentUser) return;
         const currentQRData = {};
         for (const key in qrInputs) {
              const dbKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
