@@ -1,144 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     let currentUser = null;
 
-    // --- Auth View DOM Elements ---
-    const authContainer = document.getElementById('auth-container');
-    const authError = document.getElementById('auth-error');
-    const authMessage = document.getElementById('auth-message');
-    const loginForm = document.getElementById('login-form');
-    const signupForm = document.getElementById('signup-form');
-    const loginTabBtn = document.getElementById('login-tab-btn');
-    const signupTabBtn = document.getElementById('signup-tab-btn');
-    const passwordToggles = document.querySelectorAll('.toggle-password');
-
-    // --- App View DOM Elements (will be assigned after login) ---
-    let appContainer, userEmailDisplay, logoutBtn, sosBtn, qrForm, qrCodeContainer, downloadQRButton, saveStatus, qrInputs;
-    let qrcode = null;
-
-    // --- UI Logic for Auth Tabs ---
-    loginTabBtn.addEventListener('click', () => {
-        loginTabBtn.classList.add('active');
-        signupTabBtn.classList.remove('active');
-        loginForm.classList.add('active');
-        signupForm.classList.remove('active');
-        clearMessages();
-    });
-
-    signupTabBtn.addEventListener('click', () => {
-        signupTabBtn.classList.add('active');
-        loginTabBtn.classList.remove('active');
-        signupForm.classList.add('active');
-        loginForm.classList.remove('active');
-        clearMessages();
-    });
-
-    // --- View/Hide Password Feature ---
-    passwordToggles.forEach(toggle => {
-        toggle.addEventListener('click', () => {
-            const passwordInput = toggle.previousElementSibling;
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggle.textContent = '🙈';
-            } else {
-                passwordInput.type = 'password';
-                toggle.textContent = '👁️';
-            }
-        });
-    });
-
-    function clearMessages() {
-        authError.textContent = '';
-        authMessage.textContent = '';
-    }
-
-    // This function finds and sets up all event listeners for the main app view
-    function initializeAppView() {
-        appContainer = document.getElementById('app-container');
-        userEmailDisplay = document.getElementById('user-email-display');
-        logoutBtn = document.getElementById('logout-btn');
-        sosBtn = document.getElementById('sos-btn');
-        qrForm = document.getElementById('qrForm');
-        qrCodeContainer = document.getElementById('qrcode');
-        downloadQRButton = document.getElementById('downloadQR');
-        saveStatus = document.getElementById('save-status');
-        qrInputs = {
-            fullName: document.getElementById('fullName'), dateOfBirth: document.getElementById('dateOfBirth'),
-            bloodType: document.getElementById('bloodType'), organDonor: document.getElementById('organDonor'),
-            medications: document.getElementById('medications'), allergies: document.getElementById('allergies'),
-            medicalConditions: document.getElementById('medicalConditions'), primaryContactName: document.getElementById('primaryContactName'),
-            primaryContactPhone: document.getElementById('primaryContactPhone'), secondaryContactName: document.getElementById('secondaryContactName'),
-            secondaryContactPhone: document.getElementById('secondaryContactPhone'), physicianName: document.getElementById('physicianName'),
-            physicianPhone: document.getElementById('physicianPhone'),
-        };
-
-        // Attach event listeners for the app view
-        logoutBtn.addEventListener('click', () => _supabase.auth.signOut());
-        sosBtn.addEventListener('click', handleSOS);
-        qrForm.addEventListener('input', () => {
-            generateQRCode();
-            debouncedSave();
-        });
-        downloadQRButton.addEventListener('click', handleDownload);
-    }
-
-    _supabase.auth.onAuthStateChange(async (event, session) => {
-        const user = session?.user;
-        if (user) {
-            currentUser = user;
-            // Initialize app elements only when the user is logged in
-            if (!appContainer) initializeAppView();
-            userEmailDisplay.textContent = currentUser.email;
-            authContainer.style.display = 'none';
-            appContainer.style.display = 'block';
-            await loadQRData(user.id);
-        } else {
-            currentUser = null;
-            if(appContainer) appContainer.style.display = 'none';
-            authContainer.style.display = 'flex';
-        }
-    });
-
-    loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); clearMessages();
-        const { error } = await _supabase.auth.signInWithPassword({
-            email: document.getElementById('login-email').value,
-            password: document.getElementById('login-password').value,
-        });
-        if (error) {
-            if (error.message.includes("Email not confirmed")) {
-                authError.textContent = 'Please verify your email address.';
-            } else {
-                authError.textContent = error.message;
-            }
-        }
-    });
-
-    signupForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); clearMessages();
-        const { error } = await _supabase.auth.signUp({
-            email: document.getElementById('signup-email').value,
-            password: document.getElementById('signup-password').value,
-        });
-        if (error) { authError.textContent = error.message; } 
-        else { authMessage.textContent = 'Success! Please check your email to verify.'; }
-    });
-
-    function handleSOS() { /* (SOS function from previous step) */ }
-    async function saveQRData(userId, data) { /* (Save function from previous step) */ }
-    async function loadQRData(userId) { /* (Load function from previous step) */ }
-    function generateQRCode() { /* (QR Generate function from previous step) */ }
-    const debounce = (func, delay) => { /* (Debounce function from previous step) */ };
-    const debouncedSave = debounce(() => { /* (Debounced save function from previous step) */ }, 1000);
-    function handleDownload() { /* (Download function from previous step) */ }
-    
-    // NOTE: For brevity, I've collapsed the functions we already perfected.
-    // The complete code with all functions is in the final block.
-});
-
-// --- FINAL, COMPLETE SCRIPT.JS ---
-document.addEventListener('DOMContentLoaded', () => {
-    let currentUser = null;
-
     // --- Auth View DOM Elements (Always present) ---
     const authContainer = document.getElementById('auth-container');
     const authError = document.getElementById('auth-error');
@@ -166,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clearMessages();
     });
 
-    // --- View/Hide Password Feature ---
+    // --- NEW: View/Hide Password Feature ---
     passwordToggles.forEach(toggle => {
         toggle.addEventListener('click', () => {
             const passwordInput = toggle.previousElementSibling;
@@ -185,8 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
         authMessage.textContent = '';
     }
     
+    // This function finds all the elements in the main app and sets up their event listeners
     function initializeAppView() {
-        if (appContainer) return; // Already initialized
+        if (appContainer) return; // Ensures this only runs once
 
         appContainer = document.getElementById('app-container');
         userEmailDisplay = document.getElementById('user-email-display');
@@ -236,11 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Authentication State Change Handler ---
     _supabase.auth.onAuthStateChange(async (event, session) => {
         const user = session?.user;
         if (user) {
             currentUser = user;
-            initializeAppView();
+            initializeAppView(); // Set up the app view elements and listeners
             userEmailDisplay.textContent = currentUser.email;
             authContainer.style.display = 'none';
             appContainer.style.display = 'block';
@@ -252,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- Auth Form Event Listeners ---
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault(); clearMessages();
         const { error } = await _supabase.auth.signInWithPassword({
@@ -274,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         else { authMessage.textContent = 'Success! Please check your email to verify.'; }
     });
 
+    // --- App Functions ---
     function handleSOS() {
         if (!navigator.geolocation) { alert("Geolocation is not supported by your browser."); return; }
         const originalButtonText = sosBtn.textContent;
@@ -282,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const { latitude, longitude } = position.coords;
-                const mapsLink = `https://maps.google.com/?q=${latitude},${longitude}`;
+                const mapsLink = `https://www.google.com/maps?q=$${latitude},${longitude}`;
                 const message = `EMERGENCY ALERT from Aegis:\nI am in an unsafe situation and need help.\n\nMy current location is:\n${mapsLink}`;
                 if (navigator.share) {
                     navigator.share({ title: 'Emergency Alert', text: message, })
