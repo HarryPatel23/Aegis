@@ -109,3 +109,19 @@ footer { text-align: center; padding: 2rem 1rem; font-size: 0.9rem; color: var(-
     50% { transform: scale(1.05); }
     100% { transform: scale(1); }
 }
+
+/* Add these new styles to the bottom of style.css */
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 1rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    user-select: none; /* Prevents text selection on click */
+}
