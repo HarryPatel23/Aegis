@@ -123,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // **IMPROVEMENT:** Added better error handling to the logout function.
     logoutBtn.addEventListener('click', async () => {
         try {
             await _supabase.auth.signOut();
@@ -148,6 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Error saving data to Supabase: ", error);
             saveStatus.textContent = 'Error saving data!';
             saveStatus.style.color = 'var(--alert-color)';
+            alert('An error occurred while saving your data. Please check the console and try again.');
         } else {
             saveStatus.textContent = 'Profile Saved ✔';
             saveStatus.style.color = 'var(--success-color)';
@@ -162,15 +162,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data) {
             for (const key in qrInputs) {
                 const dbKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
-                if (data[dbKey] !== null && data[dbKeq] !== undefined) {
+                // ** THIS WAS THE TYPO AND IT IS NOW FIXED **
+                if (data[dbKey] !== null && data[dbKey] !== undefined) {
                     qrInputs[key].value = data[dbKey];
                 } else {
                     qrInputs[key].value = '';
                 }
             }
-        } else if (error && error.code !== 'PGRST116') {
+        } else if (error && error.code !== 'PGRST116') { // Ignore the "no rows found" error
             console.error("Error loading data:", error);
+            alert('An error occurred while loading your profile. Please check the console and refresh.');
         } else {
+             // If no data is found (e.g., for a new user), make sure all fields are clear.
              for (const key in qrInputs) {
                 qrInputs[key].value = '';
             }
