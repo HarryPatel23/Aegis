@@ -23,24 +23,20 @@
                     <h2>Aegis</h2>
                     <p>Your secure, digital life-saving card.</p>
                 </div>
-
                 <div class="auth-tabs">
                     <button id="login-tab-btn" class="auth-tab active">Login</button>
                     <button id="signup-tab-btn" class="auth-tab">Sign Up</button>
                 </div>
-
                 <form id="login-form" class="auth-form active">
                     <input type="email" id="login-email" placeholder="Email" required>
                     <input type="password" id="login-password" placeholder="Password" required>
                     <button type="submit">Login</button>
                 </form>
-                
                 <form id="signup-form" class="auth-form">
                     <input type="email" id="signup-email" placeholder="Email" required>
                     <input type="password" id="signup-password" placeholder="Password (min. 6 characters)" required>
                     <button type="submit">Create Account</button>
                 </form>
-
                 <p id="auth-message" class="info-message"></p>
                 <p id="auth-error" class="error-message"></p>
             </div>
@@ -64,10 +60,8 @@
                     <form id="qrForm" class="data-form">
                         <label for="fullName">Full Name</label>
                         <input type="text" id="fullName" placeholder="Your Full Name" required>
-
                         <label for="dateOfBirth">Date of Birth</label>
                         <input type="date" id="dateOfBirth">
-
                         <label for="bloodType">Blood Type</label>
                         <select id="bloodType">
                             <option value="">Select Blood Type</option>
@@ -80,35 +74,27 @@
                             <option value="AB+">AB+</option>
                             <option value="AB-">AB-</option>
                         </select>
-
                         <label for="organDonor">Organ Donor</label>
                         <select id="organDonor">
                             <option value="">Select Status</option>
                             <option value="Yes">Yes</option>
                             <option value="No">No</option>
                         </select>
-
                         <label for="medications">Current Medications</label>
                         <textarea id="medications" placeholder="e.g., Insulin, Warfarin..."></textarea>
-                        
                         <label for="allergies">Allergies</label>
                         <textarea id="allergies" placeholder="e.g., Penicillin, Peanuts..."></textarea>
-                        
                         <label for="medicalConditions">Current Medical Conditions</label>
                         <textarea id="medicalConditions" placeholder="e.g., Diabetes, Epilepsy..."></textarea>
-                        
                         <label for="primaryContactName">Primary Emergency Contact</label>
                         <input type="text" id="primaryContactName" placeholder="Name" required>
                         <input type="tel" id="primaryContactPhone" placeholder="Phone Number" required>
-
                         <label for="secondaryContactName">Secondary Contact (Optional)</label>
                         <input type="text" id="secondaryContactName" placeholder="Name">
                         <input type="tel" id="secondaryContactPhone" placeholder="Phone Number">
-
                         <label for="physicianName">Primary Physician (Optional)</label>
                         <input type="text" id="physicianName" placeholder="Doctor's Name">
                         <input type="tel" id="physicianPhone" placeholder="Clinic Phone Number">
-
                     </form>
                     <div class="qr-output">
                         <div id="qrcode"></div>
@@ -121,6 +107,7 @@
             <div class="footer-links">
                 <a href="#" id="about-link">About Us</a>
                 <a href="#" id="terms-link">Terms & Conditions</a>
+                <a href="#" id="privacy-link">Privacy Policy</a>
                 <a href="#" id="disclaimer-link">Disclaimer</a>
             </div>
             <p>© 2025 Aegis. Stay Safe.</p>
@@ -139,8 +126,22 @@
         <div class="modal-content">
             <button class="modal-close-btn">&times;</button>
             <h2>Terms and Conditions</h2>
-            <p><strong>⚖️ Legal Disclaimer: This is a template. You must consult a legal professional.</strong></p>
-            <p>Welcome to Aegis. By using our application, you agree to these terms. You are responsible for the accuracy of the information you provide and for maintaining the confidentiality of your account. We may terminate or suspend your account at our discretion. This service is provided "as is" without any warranties. You agree to use this service at your own risk.</p>
+            <p>Welcome to Aegis. These terms and conditions outline the rules and regulations for the use of our web application. By accessing and using Aegis, you accept these terms and conditions in full. Do not continue to use Aegis if you do not accept all of the terms and conditions stated on this page.</p>
+            <p><b>1. Description of Service:</b> Aegis is a free web application that allows users to create a secure account to store their personal emergency information. This information is used to generate a QR code that links to a public, unlisted web page displaying the user-provided information for access in an emergency.</p>
+            <p><b>2. User Responsibilities:</b> You, the user, are solely and entirely responsible for the accuracy, completeness, and timeliness of the information you provide in your Aegis profile. Inaccurate or outdated information can lead to severe consequences in an emergency.</p>
+            <p><b>3. Governing Law:</b> These Terms shall be governed and construed in accordance with the laws of Gujarat, India. You agree to submit to the personal jurisdiction of the courts located in this jurisdiction.</p>
+        </div>
+    </div>
+
+    <div id="privacy-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <h2>Privacy Policy</h2>
+            <p>Your privacy is important to us. This Privacy Policy explains how we collect, use, store, and disclose your information when you use Aegis.</p>
+            <p><b>1. Information We Collect:</b> We collect your email address for account creation and the health and personal information you voluntarily provide for your emergency profile (e.g., name, blood type, allergies, etc.).</p>
+            <p><b>2. How We Use Your Information:</b> Your data is used to create and maintain your account and to generate your unique QR code. The emergency data is made public only through the unique QR code link that you control and choose to share.</p>
+            <p><b>3. Data Sharing and Disclosure:</b> We do not sell, trade, or otherwise transfer your personally identifiable information to outside parties for marketing or advertising purposes.</p>
+            <p><b>4. Data Security:</b> We take reasonable measures to protect your information, including using the secure infrastructure provided by our backend service, Supabase. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee its absolute security.</p>
         </div>
     </div>
 
@@ -148,8 +149,10 @@
         <div class="modal-content">
             <button class="modal-close-btn">&times;</button>
             <h2>Disclaimer of Liability</h2>
-            <p><strong>⚖️ Legal Disclaimer: This is a template. You must consult a legal professional.</strong></p>
-            <p>Aegis is a personal information management tool and is not a substitute for professional medical advice or emergency services. The developers of Aegis shall not be held liable for any damages, personal injury, or loss of life that may occur, whether directly or indirectly, from the use or inability to use this application. The user assumes full responsibility for their personal safety and for the accuracy and use of the information they store in the app. In an emergency, always call your local emergency number immediately.</p>
+            <p><b>1. Not Medical Advice:</b> Aegis is a personal information management tool. It is not a medical device, does not provide medical advice, and is not a substitute for professional medical consultation or local emergency services.</p>
+            <p><b>2. No Guarantee of Service:</b> The service is provided as-is. We do not guarantee that the service will be available or error-free at all times. In an emergency, the service may be unavailable due to network outages or other unforeseen circumstances.</p>
+            <p><b>3. User Assumes Full Responsibility:</b> You, the user, assume full responsibility for your personal safety and the accuracy of the information you provide. The developers of Aegis shall not be held liable for any damages, injury, or loss of life resulting from the use or inability to use this application.</p>
+            <p><b>4. Emergency Services:</b> In the event of a medical emergency, you should immediately contact your local emergency number. Aegis is not a monitoring service and will not contact emergency services on your behalf.</p>
         </div>
     </div>
     
