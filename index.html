@@ -17,35 +17,35 @@
 <body>
 
     <div id="auth-container" class="auth-page-wrapper">
-    <div class="auth-form-panel">
-        <div class="auth-form-container">
-            <div class="auth-header">
-                <h2>Aegis</h2>
-                <p>Your secure, digital life-saving card.</p>
+        <div class="auth-form-panel">
+            <div class="auth-form-container">
+                <div class="auth-header">
+                    <h2>Aegis</h2>
+                    <p>Your secure, digital life-saving card.</p>
+                </div>
+
+                <div class="auth-tabs">
+                    <button id="login-tab-btn" class="auth-tab active">Login</button>
+                    <button id="signup-tab-btn" class="auth-tab">Sign Up</button>
+                </div>
+
+                <form id="login-form" class="auth-form active">
+                    <input type="email" id="login-email" placeholder="Email" required>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                    <button type="submit">Login</button>
+                </form>
+                
+                <form id="signup-form" class="auth-form">
+                    <input type="email" id="signup-email" placeholder="Email" required>
+                    <input type="password" id="signup-password" placeholder="Password (min. 6 characters)" required>
+                    <button type="submit">Create Account</button>
+                </form>
+
+                <p id="auth-message" class="info-message"></p>
+                <p id="auth-error" class="error-message"></p>
             </div>
-
-            <div class="auth-tabs">
-                <button id="login-tab-btn" class="auth-tab active">Login</button>
-                <button id="signup-tab-btn" class="auth-tab">Sign Up</button>
-            </div>
-
-            <form id="login-form" class="auth-form active">
-                <input type="email" id="login-email" placeholder="Email" required>
-                <input type="password" id="login-password" placeholder="Password" required>
-                <button type="submit">Login</button>
-            </form>
-            
-            <form id="signup-form" class="auth-form">
-                <input type="email" id="signup-email" placeholder="Email" required>
-                <input type="password" id="signup-password" placeholder="Password (min. 6 characters)" required>
-                <button type="submit">Create Account</button>
-            </form>
-
-            <p id="auth-message" class="info-message"></p>
-            <p id="auth-error" class="error-message"></p>
         </div>
     </div>
-</div>
 
     <div id="app-container" style="display: none;">
         <header class="app-header">
@@ -58,6 +58,7 @@
         <main>
             <section id="qr-section" class="content-section active">
                 <h2>Your Digital Emergency Card</h2>
+                <span id="save-status" class="save-status-message"></span> 
                 <p class="section-description">Your data is securely saved to your profile. Set the QR as your lock screen wallpaper.</p>
                 <div class="qr-container">
                     <form id="qrForm" class="data-form">
@@ -151,10 +152,9 @@
             <p>Aegis is a personal information management tool and is not a substitute for professional medical advice or emergency services. The developers of Aegis shall not be held liable for any damages, personal injury, or loss of life that may occur, whether directly or indirectly, from the use or inability to use this application. The user assumes full responsibility for their personal safety and for the accuracy and use of the information they store in the app. In an emergency, always call your local emergency number immediately.</p>
         </div>
     </div>
-
-   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
-
 </html>
