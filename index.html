@@ -4,13 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aegis - Your Safety Platform</title>
-    <meta name="description" content="Aegis: Your free, secure digital emergency card. Create a life-saving QR profile to protect yourself and your loved ones.">
-    <meta property="og:title" content="Aegis - Your Safety Platform">
-    <meta property="og:description" content="Create a free, secure digital emergency card.">
-    <meta property="og:type" content="website">
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 </head>
@@ -27,16 +21,25 @@
                     <button id="login-tab-btn" class="auth-tab active">Login</button>
                     <button id="signup-tab-btn" class="auth-tab">Sign Up</button>
                 </div>
+
                 <form id="login-form" class="auth-form active">
                     <input type="email" id="login-email" placeholder="Email" required>
-                    <input type="password" id="login-password" placeholder="Password" required>
+                    <div class="password-wrapper">
+                        <input type="password" id="login-password" placeholder="Password" required>
+                        <span class="toggle-password">👁️</span>
+                    </div>
                     <button type="submit">Login</button>
                 </form>
+                
                 <form id="signup-form" class="auth-form">
                     <input type="email" id="signup-email" placeholder="Email" required>
-                    <input type="password" id="signup-password" placeholder="Password (min. 6 characters)" required>
+                    <div class="password-wrapper">
+                        <input type="password" id="signup-password" placeholder="Password (min. 6 characters)" required>
+                        <span class="toggle-password">👁️</span>
+                    </div>
                     <button type="submit">Create Account</button>
                 </form>
+
                 <p id="auth-message" class="info-message"></p>
                 <p id="auth-error" class="error-message"></p>
             </div>
@@ -63,31 +66,7 @@
                         <input type="text" id="fullName" placeholder="Your Full Name" required>
                         <label for="dateOfBirth">Date of Birth</label>
                         <input type="date" id="dateOfBirth">
-                        <label for="bloodType">Blood Type</label>
-                        <select id="bloodType">
-                            <option value="">Select Blood Type</option>
-                            <option value="O+">O+</option><option value="O-">O-</option><option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option>
-                        </select>
-                        <label for="organDonor">Organ Donor</label>
-                        <select id="organDonor">
-                            <option value="">Select Status</option><option value="Yes">Yes</option><option value="No">No</option>
-                        </select>
-                        <label for="medications">Current Medications</label>
-                        <textarea id="medications" placeholder="e.g., Insulin, Warfarin..."></textarea>
-                        <label for="allergies">Allergies</label>
-                        <textarea id="allergies" placeholder="e.g., Penicillin, Peanuts..."></textarea>
-                        <label for="medicalConditions">Current Medical Conditions</label>
-                        <textarea id="medicalConditions" placeholder="e.g., Diabetes, Epilepsy..."></textarea>
-                        <label for="primaryContactName">Primary Emergency Contact</label>
-                        <input type="text" id="primaryContactName" placeholder="Name" required>
-                        <input type="tel" id="primaryContactPhone" placeholder="Phone Number" required>
-                        <label for="secondaryContactName">Secondary Contact (Optional)</label>
-                        <input type="text" id="secondaryContactName" placeholder="Name">
-                        <input type="tel" id="secondaryContactPhone" placeholder="Phone Number">
-                        <label for="physicianName">Primary Physician (Optional)</label>
-                        <input type="text" id="physicianName" placeholder="Doctor's Name">
-                        <input type="tel" id="physicianPhone" placeholder="Clinic Phone Number">
-                    </form>
+                        </form>
                     <div class="qr-output">
                         <div id="qrcode"></div>
                         <button id="downloadQR">Download QR Code</button>
@@ -95,19 +74,9 @@
                 </div>
             </section>
         </main>
-        <footer>
-            <div class="footer-links">
-                <a href="#" id="about-link">About Us</a><a href="#" id="terms-link">Terms & Conditions</a><a href="#" id="privacy-link">Privacy Policy</a><a href="#" id="disclaimer-link">Disclaimer</a>
-            </div>
-            <p>© 2025 Aegis. Stay Safe.</p>
-        </footer>
+        <footer>...</footer>
     </div>
 
-    <div id="about-modal" class="modal-overlay">...</div>
-    <div id="terms-modal" class="modal-overlay">...</div>
-    <div id="privacy-modal" class="modal-overlay">...</div>
-    <div id="disclaimer-modal" class="modal-overlay">...</div>
-    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
     <script src="script.js"></script>
