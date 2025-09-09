@@ -22,56 +22,14 @@ h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; text-align: cen
 .info-message { color: var(--success-color); text-align: center; margin-top: 1rem; font-weight: 600; min-height: 1.2em; }
 
 /* --- Auth Page Centered Layout --- */
-.auth-page-wrapper {
-    display: flex;
-    width: 100%;
-    min-height: 100vh;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-}
-
-.auth-form-panel {
-    width: 100%;
-    max-width: 420px;
-    background-color: var(--secondary-bg);
-    padding: 2.5rem;
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-}
-
-.auth-branding-panel {
-    display: none; /* Hides the blue side panel */
-}
-
-/* New styles for the header inside the form */
-.auth-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-.auth-header h2 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--brand-color);
-}
-.auth-header p {
-    color: var(--text-secondary);
-    font-size: 1rem;
-}
-
+.auth-page-wrapper { display: flex; width: 100%; min-height: 100vh; justify-content: center; align-items: center; padding: 1rem; }
+.auth-form-panel { width: 100%; max-width: 420px; background-color: var(--secondary-bg); padding: 2.5rem; border-radius: 12px; box-shadow: var(--shadow); }
+.auth-branding-panel { display: none; }
+.auth-header { text-align: center; margin-bottom: 2rem; }
+.auth-header h2 { font-size: 2.5rem; font-weight: 700; color: var(--brand-color); }
+.auth-header p { color: var(--text-secondary); font-size: 1rem; }
 .auth-tabs { display: flex; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); }
-.auth-tab {
-    flex-grow: 1;
-    padding: 1rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s ease-in-out;
-}
+.auth-tab { flex-grow: 1; padding: 1rem; font-size: 1.1rem; font-weight: 600; background: none; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s ease-in-out; }
 .auth-tab.active { color: var(--brand-color); border-bottom-color: var(--brand-color); }
 .auth-form { display: none; flex-direction: column; gap: 1rem; }
 .auth-form.active { display: flex; }
@@ -110,6 +68,16 @@ footer { text-align: center; padding: 2rem 1rem; font-size: 0.9rem; color: var(-
 .modal-content p { margin-bottom: 1rem; line-height: 1.7; }
 .modal-close-btn { position: absolute; top: 1rem; right: 1rem; font-size: 1.8rem; font-weight: bold; color: #aaa; background: none; border: none; cursor: pointer; padding: 0; line-height: 1; }
 .modal-close-btn:hover { color: var(--text-primary); }
+
+/* --- New styles for the Save Status message --- */
+.save-status-message {
+    display: block;
+    text-align: center;
+    font-weight: 600;
+    color: var(--text-secondary);
+    min-height: 1.2em;
+    transition: opacity 0.5s ease-in-out;
+}
 
 /* --- Responsive adjustments --- */
 @media (min-width: 769px) {
