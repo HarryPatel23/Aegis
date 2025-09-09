@@ -85,3 +85,27 @@ footer { text-align: center; padding: 2rem 1rem; font-size: 0.9rem; color: var(-
     .qr-container .data-form { flex: 1; }
     .qr-output { flex-shrink: 0; margin-top: 2rem; }
 }
+
+/* (Your existing style.css content) */
+/* ... */
+
+/* ADD THIS AT THE BOTTOM */
+.sos-button {
+    background-color: var(--alert-color);
+    color: white;
+    font-weight: 700;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    animation: pulse 2s infinite;
+}
+
+.sos-button:hover {
+    background-color: #d12c22;
+    animation: none;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
