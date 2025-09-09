@@ -18,11 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const aboutLink = document.getElementById('about-link');
     const termsLink = document.getElementById('terms-link');
     const disclaimerLink = document.getElementById('disclaimer-link');
-    const privacyLink = document.getElementById('privacy-link'); // New element
+    const privacyLink = document.getElementById('privacy-link');
     const aboutModal = document.getElementById('about-modal');
     const termsModal = document.getElementById('terms-modal');
     const disclaimerModal = document.getElementById('disclaimer-modal');
-    const privacyModal = document.getElementById('privacy-modal'); // New element
+    const privacyModal = document.getElementById('privacy-modal');
     const allModals = document.querySelectorAll('.modal-overlay');
     const saveStatus = document.getElementById('save-status');
 
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     aboutLink.addEventListener('click', (e) => { e.preventDefault(); openModal(aboutModal); });
     termsLink.addEventListener('click', (e) => { e.preventDefault(); openModal(termsModal); });
     disclaimerLink.addEventListener('click', (e) => { e.preventDefault(); openModal(disclaimerModal); });
-    privacyLink.addEventListener('click', (e) => { e.preventDefault(); openModal(privacyModal); }); // New listener
+    privacyLink.addEventListener('click', (e) => { e.preventDefault(); openModal(privacyModal); });
 
     allModals.forEach(modal => {
         modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
@@ -60,18 +60,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- UI Logic for Auth Tabs ---
     loginTabBtn.addEventListener('click', () => {
-        loginTabBtn.classList.add('active');
-        signupTabBtn.classList.remove('active');
-        loginForm.classList.add('active');
-        signupForm.classList.remove('active');
+        loginTabBtn.classList.add('active'); signupTabBtn.classList.remove('active');
+        loginForm.classList.add('active'); signupForm.classList.remove('active');
         clearMessages();
     });
 
     signupTabBtn.addEventListener('click', () => {
-        signupTabBtn.classList.add('active');
-        loginTabBtn.classList.remove('active');
-        signupForm.classList.add('active');
-        loginForm.classList.remove('active');
+        signupTabBtn.classList.add('active'); loginTabBtn.classList.remove('active');
+        signupForm.classList.add('active'); loginForm.classList.remove('active');
         clearMessages();
     });
 
@@ -127,8 +123,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
+    // **IMPROVEMENT:** Added better error handling to the logout function.
     logoutBtn.addEventListener('click', async () => {
-        await _supabase.auth.signOut();
+        try {
+            await _supabase.auth.signOut();
+        } catch (error) {
+            console.error('Error during logout:', error);
+            alert('An error occurred while logging out. Please try again.');
+        }
     });
 
     // --- Database & QR Code Logic ---
@@ -160,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data) {
             for (const key in qrInputs) {
                 const dbKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
-                if (data[dbKey] !== null && data[dbKey] !== undefined) {
+                if (data[dbKey] !== null && data[dbKeq] !== undefined) {
                     qrInputs[key].value = data[dbKey];
                 } else {
                     qrInputs[key].value = '';
