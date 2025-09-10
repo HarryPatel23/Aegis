@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // This function finds all elements in the main app and sets up their event listeners
     function initializeAppView() {
-        if (appContainer && appContainer.style.display === 'block') return; // Already initialized and visible
+        if (appContainer && appContainer.style.display === 'block') return;
 
         appContainer = document.getElementById('app-container');
         userEmailDisplay = document.getElementById('user-email-display');
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const user = session?.user;
         if (user) {
             currentUser = user;
-            initializeAppView(); // Set up the app view elements and listeners
+            initializeAppView();
             userEmailDisplay.textContent = currentUser.email;
             authContainer.style.display = 'none';
             appContainer.style.display = 'block';
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const { latitude, longitude } = position.coords;
-                const mapsLink = `http://googleusercontent.com/maps.google.com/5{latitude},${longitude}`;
+                const mapsLink = `http://googleusercontent.com/maps.google.com/6{latitude},${longitude}`;
                 const message = `EMERGENCY ALERT from Aegis:\nI am in an unsafe situation and need help.\n\nMy current location is:\n${mapsLink}`;
                 
                 const primaryContactPhone = qrInputs.primaryContactPhone.value.replace(/\D/g, '');
@@ -216,11 +216,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data) {
             for (const key in qrInputs) {
                 const dbKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
+                // ** THIS IS THE CORRECTED LINE THAT FIXES THE BUG **
                 if (data[dbKey] !== null && data[dbKey] !== undefined) {
                     qrInputs[key].value = data[dbKey];
                 } else { qrInputs[key].value = ''; }
             }
-        } else if (error && error.code !== 'PGRST116') { console.error("Error loading data:", error); } 
+        } else if (error && error.code !== 'PGRST116') { 
+            console.error("Error loading data:", error); 
+            alert("Error loading your profile. Please check the console and refresh.");
+        } 
         else { for (const key in qrInputs) { qrInputs[key].value = ''; } }
         generateQRCode();
     }
