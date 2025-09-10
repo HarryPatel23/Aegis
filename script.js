@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // This variable will hold the logged-in user's data
     let currentUser = null;
 
-    // --- Auth View DOM Elements (Always present on page load) ---
+    // --- DOM Element References for the Authentication View ---
     const authContainer = document.getElementById('auth-container');
     const authError = document.getElementById('auth-error');
     const authMessage = document.getElementById('auth-message');
@@ -11,11 +12,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const signupTabBtn = document.getElementById('signup-tab-btn');
     const passwordToggles = document.querySelectorAll('.toggle-password');
 
-    // --- App View DOM Elements (will be assigned after login to prevent errors) ---
+    // --- DOM Element References for the Main App (will be assigned after login) ---
     let appContainer, userEmailDisplay, logoutBtn, sosBtn, qrForm, qrCodeContainer, downloadQRButton, saveStatus, qrInputs, qrcode,
         aboutLink, termsLink, privacyLink, disclaimerLink, howItWorksLink, allModals, aboutModal, termsModal, privacyModal, disclaimerModal, howItWorksModal;
 
-    // --- UI Logic for Auth Tabs ---
+    // =================================================================================
+    // SECTION 1: CORE UI HANDLERS
+    // =================================================================================
+
+    // --- UI Logic for Login/Signup Tabs ---
     loginTabBtn.addEventListener('click', () => {
         loginTabBtn.classList.add('active'); signupTabBtn.classList.remove('active');
         loginForm.classList.add('active'); signupForm.classList.remove('active');
@@ -46,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
         authError.textContent = '';
         authMessage.textContent = '';
     }
-    
-    // This function finds all elements in the main app and sets up their event listeners
+
+    // This function runs only once after a user logs in to get all the app elements
     function initializeAppView() {
         if (appContainer && appContainer.style.display === 'block') return;
 
@@ -83,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
             physicianPhone: document.getElementById('physicianPhone'),
         };
 
-        // Attach event listeners for the app view
+        // Attach event listeners for all buttons and forms inside the main app
         logoutBtn.addEventListener('click', () => _supabase.auth.signOut());
         sosBtn.addEventListener('click', handleSOS);
         qrForm.addEventListener('input', () => {
@@ -103,12 +108,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Authentication State Change Handler ---
+    // =================================================================================
+    // SECTION 2: AUTHENTICATION
+    // =================================================================================
+
+    // This is the main controller of the app. It listens for login/logout events.
     _supabase.auth.onAuthStateChange(async (event, session) => {
         const user = session?.user;
         if (user) {
             currentUser = user;
-            initializeAppView();
+            initializeAppView(); // Set up the app view now that the user is logged in
             userEmailDisplay.textContent = currentUser.email;
             authContainer.style.display = 'none';
             appContainer.style.display = 'block';
@@ -120,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Auth Form Event Listeners ---
+    // --- Login/Signup Form Handlers ---
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault(); clearMessages();
         const { error } = await _supabase.auth.signInWithPassword({
@@ -143,7 +152,10 @@ document.addEventListener('DOMContentLoaded', () => {
         else { authMessage.textContent = 'Success! Please check your email to verify.'; }
     });
 
-    // --- App Functions ---
+    // =================================================================================
+    // SECTION 3: APP FEATURES
+    // =================================================================================
+
     function handleSOS() {
         if (!navigator.geolocation) { alert("Geolocation is not supported by your browser."); return; }
         const originalButtonText = sosBtn.textContent;
@@ -152,13 +164,10 @@ document.addEventListener('DOMContentLoaded', () => {
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const { latitude, longitude } = position.coords;
-                const mapsLink = `http://googleusercontent.com/maps.google.com/6{latitude},${longitude}`;
+                const mapsLink = `http://googleusercontent.com/maps.google.com/7{latitude},${longitude}`;
                 const message = `EMERGENCY ALERT from Aegis:\nI am in an unsafe situation and need help.\n\nMy current location is:\n${mapsLink}`;
-                
                 const primaryContactPhone = qrInputs.primaryContactPhone.value.replace(/\D/g, '');
-
                 const whatsappUrl = primaryContactPhone ? `https://wa.me/${primaryContactPhone}?text=${encodeURIComponent(message)}` : null;
-                
                 const useWhatsApp = whatsappUrl && confirm("Send alert to your Primary Contact via WhatsApp?\n\n(Press 'Cancel' to share with other apps.)");
 
                 if (useWhatsApp) {
@@ -216,13 +225,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data) {
             for (const key in qrInputs) {
                 const dbKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
-                // ** THIS IS THE CORRECTED LINE THAT FIXES THE BUG **
                 if (data[dbKey] !== null && data[dbKey] !== undefined) {
                     qrInputs[key].value = data[dbKey];
                 } else { qrInputs[key].value = ''; }
             }
         } else if (error && error.code !== 'PGRST116') { 
-            console.error("Error loading data:", error); 
+            console.error("Error loading data:", error);
             alert("Error loading your profile. Please check the console and refresh.");
         } 
         else { for (const key in qrInputs) { qrInputs[key].value = ''; } }
