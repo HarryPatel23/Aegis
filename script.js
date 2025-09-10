@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clearMessages();
     });
 
-    // --- NEW: View/Hide Password Feature ---
+    // --- View/Hide Password Feature ---
     passwordToggles.forEach(toggle => {
         toggle.addEventListener('click', () => {
             const passwordInput = toggle.previousElementSibling;
@@ -47,9 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
         authMessage.textContent = '';
     }
     
-    // This function finds all the elements in the main app and sets up their event listeners
     function initializeAppView() {
-        if (appContainer) return; // Ensures this only runs once
+        if (appContainer) return; // Already initialized
 
         appContainer = document.getElementById('app-container');
         userEmailDisplay = document.getElementById('user-email-display');
@@ -99,12 +98,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Authentication State Change Handler ---
     _supabase.auth.onAuthStateChange(async (event, session) => {
         const user = session?.user;
         if (user) {
             currentUser = user;
-            initializeAppView(); // Set up the app view elements and listeners
+            initializeAppView();
             userEmailDisplay.textContent = currentUser.email;
             authContainer.style.display = 'none';
             appContainer.style.display = 'block';
@@ -116,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Auth Form Event Listeners ---
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault(); clearMessages();
         const { error } = await _supabase.auth.signInWithPassword({
@@ -139,16 +136,18 @@ document.addEventListener('DOMContentLoaded', () => {
         else { authMessage.textContent = 'Success! Please check your email to verify.'; }
     });
 
-    // --- App Functions ---
     function handleSOS() {
-        if (!navigator.geolocation) { alert("Geolocation is not supported by your browser."); return; }
+        if (!navigator.geolocation) {
+            alert("Geolocation is not supported by your browser.");
+            return;
+        }
         const originalButtonText = sosBtn.textContent;
         sosBtn.textContent = 'Getting Location...';
         sosBtn.disabled = true;
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const { latitude, longitude } = position.coords;
-                const mapsLink = `https://www.google.com/maps?q=$${latitude},${longitude}`;
+                const mapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
                 const message = `EMERGENCY ALERT from Aegis:\nI am in an unsafe situation and need help.\n\nMy current location is:\n${mapsLink}`;
                 if (navigator.share) {
                     navigator.share({ title: 'Emergency Alert', text: message, })
@@ -164,8 +163,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             },
             (error) => {
-                console.error("Error getting location:", error);
-                alert("Could not get your location. Please ensure location permissions are granted.");
+                console.error("Error getting location:", error.code, error.message);
+                if (error.code === 1) { // Error code 1 is PERMISSION_DENIED
+                    alert("You have blocked location access.\n\nTo use the SOS feature, please go to your browser settings for this site and change the Location permission to 'Allow' or 'Ask'.");
+                } else {
+                    alert("Could not get your location. Please ensure GPS is on and try again.");
+                }
                 sosBtn.textContent = originalButtonText;
                 sosBtn.disabled = false;
             }
